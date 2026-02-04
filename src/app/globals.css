@@ -3,25 +3,113 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-border: #e2e8f0;
+  --primary: #3b82f6;
+  --primary-dark: #2563eb;
+  --sidebar-bg: #0f172a;
+  --sidebar-text: #94a3b8;
+  --sidebar-active: #3b82f6;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--foreground);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* 카드 유틸리티 */
+.card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+/* 입력 필드 스타일 */
+input,
+select {
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 테이블 스타일 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--card-border);
+}
+
+th {
+  background: #f8fafc;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #64748b;
 }
