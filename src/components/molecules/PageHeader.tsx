@@ -1,6 +1,6 @@
 'use client';
 
-import { useGuide } from '@/contexts/GuideContext';
+import { useGuide } from '../../contexts/GuideContext';
 import { HelpCircle } from 'lucide-react';
 
 interface PageHeaderProps {
@@ -8,25 +8,27 @@ interface PageHeaderProps {
     menuId: string;
 }
 
-export function PageHeader({ title, menuId }: PageHeaderProps) {
+export const PageHeader = ({ title, menuId }: PageHeaderProps) => {
     const { openGuide } = useGuide();
 
     return (
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-cyan-500/20">
-            <h2
-                className="text-2xl font-black tracking-wider text-cyan-400"
-                style={{ fontFamily: 'Orbitron, sans-serif' }}
-            >
-                {title}
-            </h2>
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+            <div>
+                <h2 className="text-xl font-bold text-gray-800 tracking-tight">
+                    {title}
+                </h2>
+                <div className="mt-1 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                    <span className="text-[10px] text-gray-400 font-medium uppercase tracking-widest">System Online</span>
+                </div>
+            </div>
             <button
                 onClick={() => openGuide(menuId)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#12121a] hover:bg-cyan-500/10 text-cyan-500 border border-cyan-500/30 rounded transition-all text-xs font-bold uppercase tracking-widest"
-                style={{ fontFamily: 'Orbitron, sans-serif' }}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 text-gray-500 hover:text-blue-500 hover:border-blue-200 hover:bg-blue-50 transition-all text-sm font-medium"
             >
-                <HelpCircle size={16} className="text-pink-500" />
-                HELP_DOCS
+                <HelpCircle size={16} />
+                <span>도움말</span>
             </button>
         </div>
     );
-}
+};

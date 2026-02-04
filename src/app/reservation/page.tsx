@@ -41,46 +41,46 @@ export default function ReservationPage() {
     };
 
     return (
-        <div className="space-y-6 cyber-grid min-h-screen p-6">
+        <div className="p-6 space-y-6">
             <PageHeader title="예약/재고 관리" menuId="reservation" />
 
-            <div className="bg-[#12121a] rounded-lg border border-cyan-500/20 overflow-hidden shadow-2xl">
+            <div className="erp-card">
                 {/* 캘린더 헤더 */}
-                <div className="p-6 border-b border-cyan-500/20 flex items-center justify-between bg-cyan-500/5">
+                <div className="p-5 border-b border-gray-100 flex items-center justify-between bg-gray-50/30">
                     <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-3">
-                            <CalendarIcon className="text-cyan-400" size={24} />
-                            <h3 className="text-2xl font-black text-cyan-400 tracking-wider" style={{ fontFamily: 'Orbitron, sans-serif' }}>
-                                {format(currentDate, 'yyyy / MM')}
+                        <div className="flex items-center gap-2">
+                            <CalendarIcon className="text-blue-500" size={20} />
+                            <h3 className="text-lg font-bold text-gray-800">
+                                {format(currentDate, 'yyyy년 MM월')}
                             </h3>
                         </div>
-                        <div className="flex bg-[#0a0a0f] rounded border border-cyan-500/20 p-1">
-                            <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="p-1.5 hover:text-cyan-400 text-zinc-500 transition-colors">
-                                <ChevronLeft size={20} />
+                        <div className="flex bg-white rounded border border-gray-200 p-1">
+                            <button onClick={() => setCurrentDate(subMonths(currentDate, 1))} className="p-1 px-2 hover:bg-gray-100 text-gray-500 rounded transition-colors">
+                                <ChevronLeft size={16} />
                             </button>
-                            <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="p-1.5 hover:text-cyan-400 text-zinc-500 transition-colors">
-                                <ChevronRight size={20} />
+                            <button onClick={() => setCurrentDate(addMonths(currentDate, 1))} className="p-1 px-2 hover:bg-gray-100 text-gray-500 rounded transition-colors">
+                                <ChevronRight size={16} />
                             </button>
                         </div>
                     </div>
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="cyber-btn flex items-center gap-2"
+                        className="erp-btn erp-btn-primary flex items-center gap-2 shadow-sm"
                     >
-                        <Plus size={18} />
-                        NEW_RESERVATION
+                        <Plus size={16} />
+                        예약 등록
                     </button>
                 </div>
 
                 {/* 캘린더 그리드 */}
-                <div className="grid grid-cols-7 gap-px bg-cyan-500/10">
-                    {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d, idx) => (
-                        <div key={d} className={`bg-[#0d0d14] p-3 text-center text-[10px] font-black tracking-widest ${idx === 0 ? 'text-pink-500' : idx === 6 ? 'text-cyan-400' : 'text-zinc-500'}`} style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                <div className="grid grid-cols-7 gap-px bg-gray-200 border-b border-gray-200">
+                    {['일', '월', '화', '수', '목', '금', '토'].map((d, idx) => (
+                        <div key={d} className={`bg-gray-50 p-2 text-center text-[11px] font-bold ${idx === 0 ? 'text-red-500' : idx === 6 ? 'text-blue-500' : 'text-gray-500'}`}>
                             {d}
                         </div>
                     ))}
                     {Array.from({ length: startOfMonth(currentDate).getDay() }).map((_, i) => (
-                        <div key={`empty-${i}`} className="bg-[#0a0a0f]/50 p-4 h-32 opacity-20" />
+                        <div key={`empty-${i}`} className="bg-white/50 h-32" />
                     ))}
                     {days.map((day) => {
                         const dateStr = format(day, 'yyyy-MM-dd');
@@ -88,22 +88,24 @@ export default function ReservationPage() {
                         const isToday = isSameDay(day, new Date());
 
                         return (
-                            <div key={dateStr} className={`bg-[#0d0d14] p-2 h-32 border-r border-b border-cyan-500/10 hover:bg-cyan-500/5 transition-all group ${isToday ? 'ring-1 ring-inset ring-cyan-500/50 bg-cyan-500/5' : ''}`}>
-                                <div className={`text-sm font-bold mb-2 font-mono ${isToday ? 'text-cyan-400' : 'text-zinc-600 group-hover:text-zinc-400'}`}>
-                                    {format(day, 'dd')}
+                            <div key={dateStr} className={`bg-white p-2 h-32 border-r border-b border-gray-100 last:border-r-0 hover:bg-gray-50 transition-all group ${isToday ? 'bg-blue-50/30' : ''}`}>
+                                <div className={`text-xs font-bold mb-1 ${isToday ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                                    {format(day, 'd')}
+                                    {isToday && <span className="ml-1.5 text-[10px] bg-blue-500 text-white px-1 rounded-sm">오늘</span>}
                                 </div>
-                                <div className="space-y-1 overflow-y-auto max-h-20 scrollbar-hide">
+                                <div className="space-y-1 overflow-y-auto max-h-[84px] no-scrollbar">
                                     {dayReservations.map((res, idx) => (
                                         <div
                                             key={idx}
                                             className={cn(
-                                                "text-[9px] px-1.5 py-1 rounded border leading-tight truncate font-bold uppercase tracking-tighter",
-                                                res.productName === '패키지' ? "bg-purple-500/10 border-purple-500/50 text-purple-400" :
-                                                    res.productName === '플레이존' ? "bg-cyan-500/10 border-cyan-500/50 text-cyan-400" :
-                                                        "bg-pink-500/10 border-pink-500/50 text-pink-400"
+                                                "text-[10px] px-1.5 py-0.5 rounded border leading-tight truncate font-medium",
+                                                res.productName === '패키지' ? "bg-purple-50 border-purple-100 text-purple-600" :
+                                                    res.productName === '플레이존' ? "bg-blue-50 border-blue-100 text-blue-600" :
+                                                        "bg-orange-50 border-orange-100 text-orange-600"
                                             )}
                                         >
-                                            {res.time} {res.customerName}
+                                            <span className="opacity-70 mr-1">{res.time}</span>
+                                            {res.customerName}
                                         </div>
                                     ))}
                                 </div>
@@ -115,83 +117,82 @@ export default function ReservationPage() {
 
             {/* 새 예약 등록 모달 */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#0a0a0f]/90 backdrop-blur-md p-4">
-                    <div className="bg-[#12121a] w-full max-w-md rounded border border-cyan-500/30 shadow-[0_0_50px_rgba(0,240,255,0.1)] overflow-hidden animate-in zoom-in-95 duration-300">
-                        <div className="p-6 border-b border-cyan-500/20 bg-cyan-500/5 flex items-center justify-between">
-                            <h3 className="text-lg font-black text-cyan-400 tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>CREATE_NODE::RESERVATION</h3>
-                            <button onClick={() => setIsModalOpen(false)} className="text-zinc-500 hover:text-pink-500 transition-colors">
+                <div className="fixed inset-0 z-[110] flex items-center justify-center bg-gray-900/40 backdrop-blur-sm p-4">
+                    <div className="bg-white w-full max-w-md rounded-xl border border-gray-200 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+                        <div className="p-5 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                            <h3 className="text-lg font-bold text-gray-800">신규 예약 등록</h3>
+                            <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
                                 <X size={20} />
                             </button>
                         </div>
 
-                        <div className="p-6 space-y-5">
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-[10px] font-bold text-cyan-500/50 uppercase tracking-widest">
-                                    <User size={12} /> CUSTOMER_NAME
+                        <div className="p-6 space-y-4">
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-gray-500 flex items-center gap-1.5">
+                                    <User size={14} /> 고객명
                                 </label>
                                 <input
                                     type="text"
                                     value={newReservation.customerName || ''}
                                     onChange={e => setNewReservation({ ...newReservation, customerName: e.target.value })}
-                                    className="w-full"
-                                    placeholder="ENTER_NAME..."
+                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition"
+                                    placeholder="고객 성함을 입력하세요"
                                 />
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-[10px] font-bold text-cyan-500/50 uppercase tracking-widest">
-                                        <CalendarIcon size={12} /> DATE_STAMP
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-gray-500 flex items-center gap-1.5">
+                                        <CalendarIcon size={14} /> 날짜
                                     </label>
                                     <input
                                         type="date"
                                         value={newReservation.date}
                                         onChange={e => setNewReservation({ ...newReservation, date: e.target.value })}
-                                        className="w-full"
+                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition"
                                     />
                                 </div>
-                                <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-[10px] font-bold text-cyan-500/50 uppercase tracking-widest">
-                                        <Clock size={12} /> TIME_SLOT
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-gray-500 flex items-center gap-1.5">
+                                        <Clock size={14} /> 시간
                                     </label>
                                     <input
                                         type="time"
                                         value={newReservation.time}
                                         onChange={e => setNewReservation({ ...newReservation, time: e.target.value })}
-                                        className="w-full"
+                                        className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition"
                                     />
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-[10px] font-bold text-cyan-500/50 uppercase tracking-widest">
-                                    <Package size={12} /> RESOURCE_TYPE
+                            <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-gray-500 flex items-center gap-1.5">
+                                    <Package size={14} /> 리소스
                                 </label>
                                 <select
                                     value={newReservation.productName}
                                     onChange={e => setNewReservation({ ...newReservation, productName: e.target.value })}
-                                    className="w-full"
+                                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition appearance-none bg-white font-medium"
                                 >
-                                    <option value="플레이존">PLAY_ZONE (SINGLE)</option>
-                                    <option value="캔버스존">CANVAS_ZONE (SINGLE)</option>
-                                    <option value="패키지">FULL_NODE_PACKAGE</option>
+                                    <option value="플레이존">플레이존 (단품)</option>
+                                    <option value="캔버스존">캔버스존 (단품)</option>
+                                    <option value="패키지">통합 관리 패키지</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div className="p-6 bg-[#0a0a0f] flex gap-4">
+                        <div className="p-4 bg-gray-50/50 flex gap-3 border-t border-gray-100">
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="flex-1 px-4 py-3 rounded border border-zinc-800 text-zinc-500 hover:text-white hover:bg-zinc-800 transition-all font-bold text-xs tracking-widest uppercase"
-                                style={{ fontFamily: 'Orbitron, sans-serif' }}
+                                className="flex-1 erp-btn erp-btn-outline"
                             >
-                                ABORT
+                                취소
                             </button>
                             <button
                                 onClick={handleCreate}
-                                className="flex-1 cyber-btn text-xs"
+                                className="flex-1 erp-btn erp-btn-primary"
                             >
-                                EXECUTE
+                                저장하기
                             </button>
                         </div>
                     </div>
