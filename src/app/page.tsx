@@ -1,9 +1,8 @@
 'use client';
 
-import { db } from '@/lib/utils'; // Error in user request? db is in lib/db.ts. I will fix it.
-import { useState, useEffect } from 'react';
-import { askAI } from '@/hooks/useAI';
+import { useState } from 'react';
 import { Lightbulb } from 'lucide-react';
+
 
 export default function Dashboard() {
     const [stats, setStats] = useState({ total: 0, pending: 0 });
