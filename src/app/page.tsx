@@ -123,11 +123,11 @@ export default function Dashboard() {
                                                 <div
                                                     key={sIdx}
                                                     className={`text-[10px] px-1 py-0.5 rounded truncate ${schedule.color === 'red' ? 'bg-red-500/20 text-red-400' :
-                                                            schedule.color === 'blue' ? 'bg-blue-500/20 text-blue-400' :
-                                                                schedule.color === 'green' ? 'bg-emerald-500/20 text-emerald-400' :
-                                                                    schedule.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                                        schedule.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
-                                                                            'bg-cyan-500/20 text-cyan-400'
+                                                        schedule.color === 'blue' ? 'bg-blue-500/20 text-blue-400' :
+                                                            schedule.color === 'green' ? 'bg-emerald-500/20 text-emerald-400' :
+                                                                schedule.color === 'yellow' ? 'bg-yellow-500/20 text-yellow-400' :
+                                                                    schedule.color === 'purple' ? 'bg-purple-500/20 text-purple-400' :
+                                                                        'bg-cyan-500/20 text-cyan-400'
                                                         }`}
                                                 >
                                                     {schedule.time && <span className="mr-1">{schedule.time}</span>}
@@ -176,8 +176,8 @@ export default function Dashboard() {
                                             <td className="p-2 text-zinc-400">{item.requester}</td>
                                             <td className="p-2">
                                                 <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${item.status === '진행중' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                        item.status === '완료' ? 'bg-emerald-500/20 text-emerald-400' :
-                                                            'bg-zinc-500/20 text-zinc-400'
+                                                    item.status === '완료' ? 'bg-emerald-500/20 text-emerald-400' :
+                                                        'bg-zinc-500/20 text-zinc-400'
                                                     }`}>
                                                     {item.status}
                                                 </span>
@@ -263,8 +263,8 @@ export default function Dashboard() {
                                             {order.stages.map((stage, idx) => (
                                                 <div key={idx} className="flex items-center">
                                                     <span className={`px-2 py-1 rounded text-[10px] font-medium ${idx < order.currentStage ? 'bg-emerald-500/20 text-emerald-400' :
-                                                            idx === order.currentStage ? 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500' :
-                                                                'bg-zinc-700/30 text-zinc-500'
+                                                        idx === order.currentStage ? 'bg-cyan-500/20 text-cyan-400 ring-1 ring-cyan-500' :
+                                                            'bg-zinc-700/30 text-zinc-500'
                                                         }`}>
                                                         {stage}
                                                         {idx < order.currentStage && <CheckCircle className="inline ml-1" size={10} />}
@@ -295,7 +295,7 @@ export default function Dashboard() {
                     <span className="text-[10px] text-zinc-500 font-mono">// NEURAL_ENGINE</span>
                 </div>
                 <p className="text-zinc-400 text-sm font-mono leading-relaxed">
-                    >> 분석 완료: 오늘 예정된 미팅 1건, 대기 중인 결재 2건이 있습니다. 캔버스존 리소스 사용률 92%로 높은 상태입니다.
+                    &gt;&gt; 분석 완료: 오늘 예정된 미팅 1건, 대기 중인 결재 2건이 있습니다. 캔버스존 리소스 사용률 92%로 높은 상태입니다.
                 </p>
             </div>
         </div>

@@ -127,10 +127,10 @@ export default function AdminPage() {
                     <h4 className="text-xs font-bold text-cyan-500/50 tracking-[0.2em] uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>System_Log_Console</h4>
                 </div>
                 <div className="p-4 font-mono text-[11px] text-zinc-500 h-32 overflow-y-auto space-y-1">
-                    <p>> [INFO] Local database connected.</p>
-                    <p>> [INFO] Encryption module initialized.</p>
-                    <p>> [INFO] Waiting for user action...</p>
-                    {msg && <p className={status === 'success' ? 'text-emerald-500' : 'text-pink-500'}>{`> [${status.toUpperCase()}] ${msg}`}</p>}
+                    <p>&gt; [INFO] Local database connected.</p>
+                    <p>&gt; [INFO] Encryption module initialized.</p>
+                    <p>&gt; [INFO] Waiting for user action...</p>
+                    {msg && <p className={status === 'success' ? 'text-emerald-500' : 'text-pink-500'}>{`&gt; [${status.toUpperCase()}] ${msg}`}</p>}
                 </div>
             </div>
         </div>
