@@ -1,148 +1,222 @@
 'use client';
 
 import { useState } from 'react';
-import { Lightbulb, TrendingUp, Users, Package, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { Zap, Users, TrendingUp, AlertTriangle, Activity, Terminal, Database, Shield } from 'lucide-react';
 
 export default function Dashboard() {
-    const [aiBrief] = useState("오늘 기준 총 128건의 예약이 등록되어 있으며, 캔버스존 매진율이 92%로 높은 수요를 보이고 있습니다. 플레이존의 14시~16시 시간대 예약이 특히 집중되어 있으니, 해당 시간대 운영 인력 배치에 유의하시기 바랍니다.");
+    const [aiBrief] = useState(">> 분석 완료: 총 128건의 트랜잭션 감지. 캔버스존 리소스 사용률 92%로 임계치 도달. 플레이존 14:00-16:00 시간대 고밀도 예약 클러스터 확인. 운영 인력 재배치 권고. 시스템 안정성: 최적.");
 
     const stats = [
         {
-            title: '총 예약 건수',
-            value: '128건',
+            title: 'TOTAL_RESERVATIONS',
+            value: '128',
+            unit: 'UNITS',
             change: '+12%',
-            isPositive: true,
-            icon: Package,
-            color: 'blue'
+            icon: Database,
+            color: 'cyan'
         },
         {
-            title: '금일 가용 리소스',
-            value: '85%',
+            title: 'RESOURCE_AVAILABLE',
+            value: '85',
+            unit: '%',
             change: '-5%',
-            isPositive: false,
-            icon: Users,
-            color: 'emerald'
+            icon: Activity,
+            color: 'green'
         },
         {
-            title: '캔버스존 매진율',
-            value: '92%',
+            title: 'CANVAS_ZONE_LOAD',
+            value: '92',
+            unit: '%',
             change: '+8%',
-            isPositive: true,
             icon: TrendingUp,
-            color: 'violet'
+            color: 'pink',
+            warning: true
         }
     ];
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6 cyber-grid min-h-screen p-6">
             {/* 헤더 */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold text-slate-900">경영 현황판</h1>
-                    <p className="text-slate-500 mt-1">실시간 운영 데이터를 확인하세요</p>
+                    <h1
+                        className="text-3xl font-black tracking-wider neon-text"
+                        style={{ fontFamily: 'Orbitron, sans-serif' }}
+                    >
+                        경영 현황판
+                    </h1>
+                    <p className="text-zinc-500 mt-1 font-mono text-sm">
+                        :: REAL-TIME OPERATIONAL DASHBOARD ::
+                    </p>
                 </div>
-                <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 rounded-full text-sm font-medium">
-                    <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                    Live Status
+                <div className="cyber-card px-4 py-2 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                    <span className="text-cyan-400 text-sm font-mono tracking-wider">LIVE</span>
                 </div>
             </div>
 
             {/* 통계 카드 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {stats.map((stat, idx) => (
-                    <div key={idx} className="card p-6 hover:shadow-md transition-shadow">
+                    <div
+                        key={idx}
+                        className={`cyber-card p-5 ${stat.warning ? 'border-pink-500/50' : ''}`}
+                    >
                         <div className="flex items-start justify-between">
                             <div>
-                                <p className="text-sm font-medium text-slate-500">{stat.title}</p>
-                                <h3 className="text-3xl font-bold text-slate-900 mt-2">{stat.value}</h3>
+                                <p className="text-[10px] text-zinc-500 font-mono tracking-wider">{stat.title}</p>
+                                <div className="flex items-baseline gap-1 mt-2">
+                                    <span
+                                        className={`text-4xl font-black ${stat.color === 'cyan' ? 'text-cyan-400' :
+                                                stat.color === 'green' ? 'text-emerald-400' :
+                                                    'text-pink-400'
+                                            }`}
+                                        style={{ fontFamily: 'Orbitron, sans-serif' }}
+                                    >
+                                        {stat.value}
+                                    </span>
+                                    <span className="text-zinc-500 text-sm font-mono">{stat.unit}</span>
+                                </div>
                             </div>
-                            <div className={`p-3 rounded-xl bg-${stat.color}-50`}>
-                                <stat.icon className={`text-${stat.color}-600`} size={24} />
+                            <div className={`p-3 rounded ${stat.color === 'cyan' ? 'bg-cyan-500/10' :
+                                    stat.color === 'green' ? 'bg-emerald-500/10' :
+                                        'bg-pink-500/10'
+                                }`}>
+                                <stat.icon className={`${stat.color === 'cyan' ? 'text-cyan-400' :
+                                        stat.color === 'green' ? 'text-emerald-400' :
+                                            'text-pink-400'
+                                    }`} size={24} />
                             </div>
                         </div>
-                        <div className="flex items-center gap-1 mt-4">
-                            {stat.isPositive ? (
-                                <ArrowUpRight className="text-emerald-500" size={16} />
-                            ) : (
-                                <ArrowDownRight className="text-rose-500" size={16} />
-                            )}
-                            <span className={`text-sm font-medium ${stat.isPositive ? 'text-emerald-600' : 'text-rose-600'}`}>
+                        <div className="flex items-center gap-2 mt-4">
+                            <span className={`text-xs font-mono ${stat.change.startsWith('+') ? 'text-emerald-400' : 'text-pink-400'
+                                }`}>
                                 {stat.change}
                             </span>
-                            <span className="text-sm text-slate-400 ml-1">vs 지난주</span>
+                            <span className="text-[10px] text-zinc-600 font-mono">vs LAST_WEEK</span>
                         </div>
+                        {stat.warning && (
+                            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-pink-500/20">
+                                <AlertTriangle className="text-pink-400" size={14} />
+                                <span className="text-[10px] text-pink-400 font-mono">HIGH_LOAD_WARNING</span>
+                            </div>
+                        )}
                     </div>
                 ))}
             </div>
 
             {/* AI 브리핑 */}
-            <div className="card overflow-hidden">
-                <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6">
+            <div className="cyber-card overflow-hidden">
+                <div className="bg-gradient-to-r from-purple-900/50 to-cyan-900/30 p-4 border-b border-cyan-500/20">
                     <div className="flex items-center gap-3">
-                        <div className="p-2 bg-white/10 rounded-lg backdrop-blur-sm">
-                            <Lightbulb className="text-yellow-300" size={24} />
+                        <div className="p-2 bg-purple-500/20 rounded">
+                            <Zap className="text-purple-400" size={24} />
                         </div>
                         <div>
-                            <h3 className="text-lg font-semibold text-white">AI 경영 브리핑</h3>
-                            <p className="text-blue-100 text-sm">Llama 3 기반 실시간 분석</p>
+                            <h3
+                                className="text-lg font-bold text-purple-300 tracking-wider"
+                                style={{ fontFamily: 'Orbitron, sans-serif' }}
+                            >
+                                AI_BRIEFING
+                            </h3>
+                            <p className="text-[10px] text-purple-500/60 font-mono">NEURAL_ENGINE :: LLAMA_3</p>
                         </div>
                     </div>
                 </div>
-                <div className="p-6 bg-slate-50">
-                    <p className="text-slate-700 leading-relaxed">
-                        {aiBrief}
-                    </p>
+                <div className="p-5 bg-[#0a0a0f]/50">
+                    <div className="flex items-start gap-2">
+                        <Terminal className="text-cyan-500 mt-1 flex-shrink-0" size={16} />
+                        <p className="text-zinc-300 leading-relaxed font-mono text-sm">
+                            {aiBrief}
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            {/* 빠른 액션 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="card p-6">
-                    <h4 className="font-semibold text-slate-900 mb-4">최근 예약</h4>
-                    <div className="space-y-3">
+            {/* 하단 패널 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* 최근 예약 */}
+                <div className="cyber-card">
+                    <div className="p-4 border-b border-cyan-500/20">
+                        <h4
+                            className="text-sm font-bold text-cyan-400 tracking-wider"
+                            style={{ fontFamily: 'Orbitron, sans-serif' }}
+                        >
+                            RECENT_TRANSACTIONS
+                        </h4>
+                    </div>
+                    <div className="p-4 space-y-3">
                         {[
-                            { name: '김민수', time: '14:00', product: '패키지', status: '확정' },
-                            { name: '이지은', time: '15:00', product: '플레이존', status: '확정' },
-                            { name: '박현우', time: '16:00', product: '캔버스존', status: '대기' },
+                            { id: 'TRX-0847', name: '김민수', time: '14:00', zone: 'PACKAGE', status: 'CONFIRMED' },
+                            { id: 'TRX-0848', name: '이지은', time: '15:00', zone: 'PLAYZONE', status: 'CONFIRMED' },
+                            { id: 'TRX-0849', name: '박현우', time: '16:00', zone: 'CANVAS', status: 'PENDING' },
                         ].map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between py-3 border-b border-slate-100 last:border-0">
+                            <div key={idx} className="flex items-center justify-between py-2 border-b border-zinc-800/50 last:border-0">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center text-sm font-medium text-slate-600">
-                                        {item.name.charAt(0)}
+                                    <div className="w-8 h-8 bg-cyan-500/10 rounded flex items-center justify-center">
+                                        <Users className="text-cyan-400" size={14} />
                                     </div>
                                     <div>
-                                        <p className="font-medium text-slate-900">{item.name}</p>
-                                        <p className="text-sm text-slate-500">{item.time} · {item.product}</p>
+                                        <p className="text-sm font-semibold text-zinc-200">{item.name}</p>
+                                        <p className="text-[10px] text-zinc-500 font-mono">{item.id} // {item.zone}</p>
                                     </div>
                                 </div>
-                                <span className={`px-2.5 py-1 text-xs font-medium rounded-full ${item.status === '확정'
-                                        ? 'bg-emerald-50 text-emerald-700'
-                                        : 'bg-amber-50 text-amber-700'
-                                    }`}>
-                                    {item.status}
-                                </span>
+                                <div className="text-right">
+                                    <p className="text-sm text-zinc-400 font-mono">{item.time}</p>
+                                    <span className={`text-[10px] font-mono ${item.status === 'CONFIRMED' ? 'text-emerald-400' : 'text-yellow-400'
+                                        }`}>
+                                        {item.status}
+                                    </span>
+                                </div>
                             </div>
                         ))}
                     </div>
                 </div>
 
-                <div className="card p-6">
-                    <h4 className="font-semibold text-slate-900 mb-4">운영 알림</h4>
-                    <div className="space-y-3">
+                {/* 시스템 알림 */}
+                <div className="cyber-card">
+                    <div className="p-4 border-b border-cyan-500/20">
+                        <h4
+                            className="text-sm font-bold text-pink-400 tracking-wider"
+                            style={{ fontFamily: 'Orbitron, sans-serif' }}
+                        >
+                            SYSTEM_ALERTS
+                        </h4>
+                    </div>
+                    <div className="p-4 space-y-3">
                         {[
-                            { type: 'info', message: '14시 패키지 예약 시 재고 자동 차감됩니다.', time: '방금' },
-                            { type: 'warning', message: '캔버스존 16시 예약이 90% 이상입니다.', time: '5분 전' },
-                            { type: 'success', message: '오늘 백업이 성공적으로 완료되었습니다.', time: '1시간 전' },
+                            { type: 'info', msg: '14시 패키지 예약 시 재고 자동 차감 예정', time: 'NOW' },
+                            { type: 'warning', msg: '캔버스존 16시 예약률 90% 초과', time: '-5m' },
+                            { type: 'success', msg: '일일 백업 프로세스 정상 완료', time: '-1h' },
                         ].map((item, idx) => (
-                            <div key={idx} className={`p-3 rounded-lg border-l-4 ${item.type === 'info' ? 'bg-blue-50 border-blue-500' :
-                                    item.type === 'warning' ? 'bg-amber-50 border-amber-500' :
-                                        'bg-emerald-50 border-emerald-500'
-                                }`}>
-                                <p className="text-sm text-slate-700">{item.message}</p>
-                                <p className="text-xs text-slate-400 mt-1">{item.time}</p>
+                            <div
+                                key={idx}
+                                className={`p-3 rounded border-l-2 ${item.type === 'info' ? 'bg-cyan-500/5 border-cyan-500' :
+                                        item.type === 'warning' ? 'bg-yellow-500/5 border-yellow-500' :
+                                            'bg-emerald-500/5 border-emerald-500'
+                                    }`}
+                            >
+                                <div className="flex items-start justify-between">
+                                    <p className="text-sm text-zinc-300">{item.msg}</p>
+                                    <span className="text-[10px] text-zinc-500 font-mono ml-2">{item.time}</span>
+                                </div>
                             </div>
                         ))}
                     </div>
+                </div>
+            </div>
+
+            {/* 푸터 상태바 */}
+            <div className="cyber-card p-3 flex items-center justify-between text-[10px] font-mono">
+                <div className="flex items-center gap-4">
+                    <span className="text-zinc-500">NODE_ID: LOCAL_0x7F</span>
+                    <span className="text-zinc-500">|</span>
+                    <span className="text-emerald-400 flex items-center gap-1">
+                        <Shield size={12} /> SECURE_CONNECTION
+                    </span>
+                </div>
+                <div className="text-zinc-500">
+                    DEEP.ERP v2.0.77 // © 2026 ANTIGRAFFITI
                 </div>
             </div>
         </div>

@@ -2,16 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap');
+
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: #ffffff;
-  --card-border: #e2e8f0;
-  --primary: #3b82f6;
-  --primary-dark: #2563eb;
-  --sidebar-bg: #0f172a;
-  --sidebar-text: #94a3b8;
-  --sidebar-active: #3b82f6;
+  --bg-dark: #0a0a0f;
+  --bg-panel: #12121a;
+  --neon-cyan: #00f0ff;
+  --neon-magenta: #ff00ff;
+  --neon-purple: #b026ff;
+  --neon-pink: #ff2d95;
+  --neon-yellow: #f0ff00;
+  --text-primary: #e4e4e7;
+  --text-secondary: #71717a;
+  --border-glow: rgba(0, 240, 255, 0.3);
 }
 
 * {
@@ -24,92 +27,198 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Rajdhani', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-primary);
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(ellipse at top left, rgba(176, 38, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(0, 240, 255, 0.1) 0%, transparent 50%),
+    linear-gradient(180deg, #0a0a0f 0%, #0d0d15 100%);
+  min-height: 100vh;
+}
+
+/* 스캔라인 오버레이 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 240, 255, 0.01) 2px,
+      rgba(0, 240, 255, 0.01) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* 네온 글로우 텍스트 */
+.neon-text {
+  text-shadow:
+    0 0 5px var(--neon-cyan),
+    0 0 10px var(--neon-cyan),
+    0 0 20px var(--neon-cyan),
+    0 0 40px var(--neon-cyan);
+}
+
+.neon-text-pink {
+  text-shadow:
+    0 0 5px var(--neon-pink),
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink);
 }
 
 /* 스크롤바 스타일링 */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: linear-gradient(180deg, var(--neon-cyan) 0%, var(--neon-purple) 100%);
+  border-radius: 4px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+/* 사이버펑크 카드 */
+.cyber-card {
+  background: linear-gradient(135deg, rgba(18, 18, 26, 0.9) 0%, rgba(10, 10, 15, 0.95) 100%);
+  border: 1px solid var(--border-glow);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
-/* 카드 유틸리티 */
-.card {
-  background: var(--card);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
 }
 
-/* 버튼 스타일 */
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+.cyber-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--neon-cyan), transparent);
+}
+
+/* 네온 버튼 */
+.cyber-btn {
+  background: transparent;
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  padding: 0.75rem 1.5rem;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 600;
-  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  transition: all 0.3s;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
 }
 
-.btn-primary:hover {
-  background: var(--primary-dark);
+.cyber-btn:hover {
+  background: rgba(0, 240, 255, 0.1);
+  box-shadow:
+    0 0 10px var(--neon-cyan),
+    inset 0 0 10px rgba(0, 240, 255, 0.1);
 }
 
-/* 입력 필드 스타일 */
+/* 입력 필드 */
 input,
 select {
-  border: 1px solid var(--card-border);
-  border-radius: 8px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  transition: border-color 0.2s;
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s;
 }
 
 input:focus,
 select:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
 }
 
-/* 테이블 스타일 */
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* 홀로그래픽 애니메이션 */
+@keyframes hologram {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
 }
 
-th,
-td {
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid var(--card-border);
+@keyframes glitch {
+
+  0%,
+  100% {
+    transform: translate(0);
+  }
+
+  20% {
+    transform: translate(-2px, 2px);
+  }
+
+  40% {
+    transform: translate(-2px, -2px);
+  }
+
+  60% {
+    transform: translate(2px, 2px);
+  }
+
+  80% {
+    transform: translate(2px, -2px);
+  }
 }
 
-th {
-  background: #f8fafc;
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #64748b;
+@keyframes pulse-glow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan);
+  }
+
+  50% {
+    box-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan), 0 0 30px var(--neon-cyan);
+  }
+}
+
+.animate-hologram {
+  animation: hologram 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* 그리드 배경 */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
 }
