@@ -1,18 +1,33 @@
 'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { MENU_ITEMS } from '../../constants/menuConfig';
 import { useGuide } from '../../contexts/GuideContext';
-import { LayoutDashboard, Calendar, Settings, HelpCircle, Cpu } from 'lucide-react';
-
-const Icons: Record<string, any> = { LayoutDashboard, Calendar, Settings };
+import { LayoutDashboard, Calendar, Settings, HelpCircle, Cpu, Database, Activity, TrendingUp } from 'lucide-react';
 
 export const Sidebar = () => {
+    const Icons: Record<string, any> = {
+        'LayoutDashboard': LayoutDashboard,
+        'Calendar': Calendar,
+        'Settings': Settings,
+        'Database': Database,
+        'Activity': Activity,
+        'TrendingUp': TrendingUp
+    };
+    const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
     const { openGuide } = useGuide();
 
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return <aside className="w-[280px] min-h-screen bg-[#0d0d14] border-r border-cyan-500/10" />;
+
     return (
         <aside className="w-[280px] min-h-screen flex flex-col bg-[#0d0d14] border-r border-cyan-500/10">
+            {/* ... */}
             {/* 로고 영역 */}
             <div className="px-6 py-6 border-b border-cyan-500/10">
                 <div className="flex items-center gap-4">

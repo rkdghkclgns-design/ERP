@@ -1,11 +1,18 @@
 'use client';
-
+import { useState, useEffect } from 'react';
 import { useGuide } from '../../contexts/GuideContext';
 import { X, Lightbulb, Keyboard, Info } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const HelpModal = () => {
+    const [mounted, setMounted] = useState(false);
     const { currentGuide, closeGuide } = useGuide();
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return null;
 
     return (
         <AnimatePresence>

@@ -1,12 +1,19 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../../lib/db';
 import { PageHeader } from '../../components/molecules/PageHeader';
 import { Download, Upload, Database, AlertCircle, ShieldCheck } from 'lucide-react';
 
 export default function AdminPage() {
+    const [mounted, setMounted] = useState(false);
     const [msg, setMsg] = useState('');
     const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) return <div className="min-h-screen bg-[#0a0a0f]" />;
 
     const handleBackup = async () => {
         try {
