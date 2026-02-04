@@ -2,21 +2,28 @@
 import { useState } from 'react';
 import { db } from '../../lib/db';
 import { PageHeader } from '../../components/molecules/PageHeader';
-import { Download, Upload } from 'lucide-react';
+import { Download, Upload, Database, AlertCircle, ShieldCheck } from 'lucide-react';
 
 export default function AdminPage() {
     const [msg, setMsg] = useState('');
+    const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
     const handleBackup = async () => {
-        const reservations = await db.reservations.toArray();
-        const data = JSON.stringify({ reservations }, null, 2);
-        const blob = new Blob([data], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `erp_backup_${new Date().toISOString().slice(0, 10)}.json`;
-        a.click();
-        setMsg('✅ 백업 파일이 다운로드되었습니다.');
+        try {
+            const reservations = await db.reservations.toArray();
+            const data = JSON.stringify({ reservations }, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `erp_backup_${new Date().toISOString().slice(0, 10)}.json`;
+            a.click();
+            setMsg('SYSTEM::BACKUP_FILE_GENERATED_SUCCESSFULLY');
+            setStatus('success');
+        } catch (err) {
+            setMsg('SYSTEM::BACKUP_FAILED');
+            setStatus('error');
+        }
     };
 
     const handleRestore = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,33 +36,102 @@ export default function AdminPage() {
                 if (json.reservations) {
                     await db.reservations.clear();
                     await db.reservations.bulkAdd(json.reservations);
-                    setMsg('✅ 데이터가 성공적으로 복구되었습니다.');
+                    setMsg('SYSTEM::DATA_NODES_RESTORED_COMPLETE');
+                    setStatus('success');
                 }
             } catch (err) {
-                setMsg('❌ 파일 형식이 올바르지 않습니다.');
+                setMsg('SYSTEM::INVALID_DATA_FORMAT');
+                setStatus('error');
             }
         };
         reader.readAsText(file);
     };
 
     return (
-        <div className="p-8 text-white">
+        <div className="space-y-6 cyber-grid min-h-screen p-6">
             <PageHeader title="시스템 관리" menuId="admin" />
 
-            <div className="max-w-xl space-y-6">
-                <div className="bg-[#1e293b] p-6 rounded-xl border border-gray-700">
-                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><Download className="text-green-400" /> 데이터 백업</h3>
-                    <p className="text-sm text-gray-400 mb-4">현재 브라우저에 저장된 모든 예약 데이터를 JSON 파일로 저장합니다.</p>
-                    <button onClick={handleBackup} className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 font-bold">백업 파일 다운로드</button>
+            <div className="max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* 데이터 백업 */}
+                <div className="cyber-card p-6 group hover:border-emerald-500/50 transition-all">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-emerald-500/10 rounded border border-emerald-500/20 group-hover:bg-emerald-500/20">
+                            <Download className="text-emerald-400" size={24} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-emerald-400 tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>DATA_EXPORT</h3>
+                            <p className="text-[10px] text-emerald-500/50 font-mono tracking-widest">DATABASE_SNAPSHOT</p>
+                        </div>
+                    </div>
+
+                    <p className="text-zinc-400 text-sm font-mono mb-8 leading-relaxed">
+                        현재 브라우저 IndexedDB에 저장된 모든 노드 데이터를 JSON 포맷으로 패키징하여 로컬 저장소로 전송합니다.
+                    </p>
+
+                    <button
+                        onClick={handleBackup}
+                        className="w-full px-4 py-3 bg-emerald-600/20 border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500 hover:text-black font-black text-xs tracking-[0.2em] transition-all uppercase rounded"
+                        style={{ fontFamily: 'Orbitron, sans-serif' }}
+                    >
+                        INITIALIZE_BACKUP
+                    </button>
                 </div>
 
-                <div className="bg-[#1e293b] p-6 rounded-xl border border-gray-700">
-                    <h3 className="text-lg font-bold mb-4 flex items-center gap-2"><Upload className="text-blue-400" /> 데이터 복구</h3>
-                    <p className="text-sm text-gray-400 mb-4">백업했던 JSON 파일을 업로드하면 데이터를 복원합니다. (기존 데이터는 덮어씌워집니다)</p>
-                    <input type="file" accept=".json" onChange={handleRestore} className="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700" />
-                </div>
+                {/* 데이터 복구 */}
+                <div className="cyber-card p-6 group hover:border-cyan-500/50 transition-all">
+                    <div className="flex items-center gap-4 mb-6">
+                        <div className="p-3 bg-cyan-500/10 rounded border border-cyan-500/20 group-hover:bg-cyan-500/20">
+                            <Upload className="text-cyan-400" size={24} />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-cyan-400 tracking-widest" style={{ fontFamily: 'Orbitron, sans-serif' }}>DATA_IMPORT</h3>
+                            <p className="text-[10px] text-cyan-500/50 font-mono tracking-widest">RESTORE_SEQUENCE</p>
+                        </div>
+                    </div>
 
-                {msg && <div className="p-4 bg-gray-800 rounded text-center animate-pulse">{msg}</div>}
+                    <p className="text-zinc-400 text-sm font-mono mb-8 leading-relaxed">
+                        JSON 데이터 팩을 업로드하여 시스템 노드를 재구성합니다. 주의: 기존 로컬 데이터는 모두 퍼지(Purge)됩니다.
+                    </p>
+
+                    <div className="relative">
+                        <input
+                            type="file"
+                            accept=".json"
+                            onChange={handleRestore}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                        />
+                        <div className="w-full px-4 py-3 bg-cyan-600/20 border border-cyan-500/50 text-cyan-400 font-black text-xs tracking-[0.2em] text-center uppercase rounded group-hover:bg-cyan-500 group-hover:text-black transition-all" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+                            UPLOAD_DATA_PACK
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 상태 메시지 */}
+            {msg && (
+                <div className={`mt-8 p-4 bg-[#12121a] border rounded-lg flex items-center justify-between animate-in slide-in-from-bottom-2 duration-300 ${status === 'success' ? 'border-emerald-500/50' : 'border-pink-500/50'
+                    }`}>
+                    <div className="flex items-center gap-3">
+                        {status === 'success' ? <ShieldCheck className="text-emerald-400" /> : <AlertCircle className="text-pink-400" />}
+                        <span className={`text-sm font-mono ${status === 'success' ? 'text-emerald-400' : 'text-pink-400'}`}>
+                            >> {msg}
+                        </span>
+                    </div>
+                    <span className="text-[10px] text-zinc-600 font-mono" style={{ fontFamily: 'Orbitron, sans-serif' }}>TIMESTAMP: {new Date().toLocaleTimeString()}</span>
+                </div>
+            )}
+
+            {/* 시스템 로그 섹션 (확장) */}
+            <div className="cyber-card mt-6">
+                <div className="p-4 border-b border-cyan-500/10 bg-[#0d0d14]">
+                    <h4 className="text-xs font-bold text-cyan-500/50 tracking-[0.2em] uppercase" style={{ fontFamily: 'Orbitron, sans-serif' }}>System_Log_Console</h4>
+                </div>
+                <div className="p-4 font-mono text-[11px] text-zinc-500 h-32 overflow-y-auto space-y-1">
+                    <p>> [INFO] Local database connected.</p>
+                    <p>> [INFO] Encryption module initialized.</p>
+                    <p>> [INFO] Waiting for user action...</p>
+                    {msg && <p className={status === 'success' ? 'text-emerald-500' : 'text-pink-500'}>{`> [${status.toUpperCase()}] ${msg}`}</p>}
+                </div>
             </div>
         </div>
     );
