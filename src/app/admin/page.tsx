@@ -114,7 +114,7 @@ export default function AdminPage() {
                     <div className="flex items-center gap-3">
                         {status === 'success' ? <ShieldCheck className="text-emerald-400" /> : <AlertCircle className="text-pink-400" />}
                         <span className={`text-sm font-mono ${status === 'success' ? 'text-emerald-400' : 'text-pink-400'}`}>
-                            >> {msg}
+                            &gt;&gt; {msg}
                         </span>
                     </div>
                     <span className="text-[10px] text-zinc-600 font-mono" style={{ fontFamily: 'Orbitron, sans-serif' }}>TIMESTAMP: {new Date().toLocaleTimeString()}</span>
