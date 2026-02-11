@@ -1,0 +1,16 @@
+name: ERP_GDrive_Backup
+on:
+  schedule:
+    - cron: '0 17 * * *' # KST 02:00
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: DB Dump
+        run: pg_dump ${{ secrets.DATABASE_URL }} > dump.sql
+      - name: GDrive Upload
+        uses: adityak74/google-drive-upload-git-action@main
+        with:
+          credentials: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          filename: dump.sql
+          folderId: ${{ secrets.GOOGLE_DRIVE_FOLDER_ID }}
