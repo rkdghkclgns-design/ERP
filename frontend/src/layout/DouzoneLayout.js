@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronRight, X } from 'lucide-react';
+import { HelpCircle, X } from 'lucide-react';
 
 export default function DouzoneLayout({ children, activeMenu }) {
     const [showHelp, setShowHelp] = useState(false);
