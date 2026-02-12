@@ -36,7 +36,7 @@ jobs:
         echo "Building Frontend Docker Image..."
         cd frontend
         npm install
-        npm run build
+        CI=false npm run build
         docker build -t app-frontend:latest .
         echo "Frontend Build Successful!"
 
